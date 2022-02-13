@@ -9,3 +9,8 @@ Course: [Testing React with Jest and Testing Library](https://www.udemy.com/cour
 
 ## Projects
 * Color Button
+
+## Run Project
+* npm test
+
+> Note: as the focus was only on tests, the layout of the projects was not worked on.
