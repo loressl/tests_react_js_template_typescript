@@ -9,6 +9,8 @@ Course: [Testing React with Jest and Testing Library](https://www.udemy.com/cour
 
 ## Projects
 * Color Button
+* [React unit test](https://www.youtube.com/watch?v=edXudaVB0Bg)
+* Sundaes on Demand
 
 ## Run Project
 * npm test
