@@ -50,9 +50,10 @@ describe('SummaryForm', () => {
 
         //popover disappears when we mouse out
         await userEvent.unhover(termsAndConditions)
-        const nullPopover2 = screen.queryByText(/no ice cream will actually be delivered/i)
+        const overlay = screen.queryByText(/no ice cream will actually be delivered/i)
         await waitFor(() => {
-            expect(nullPopover2).not.toBeInTheDocument()
+            expect(overlay).not.toBeInTheDocument()
         })
+
     })
 })
