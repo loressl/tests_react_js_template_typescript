@@ -5,6 +5,7 @@ import ScoopOption from './ScoopOption';
 import ToppingOption from './ToppingOption';
 import {AlertBanner} from '../common/AlertBanner'
 import { useOrderDetails } from '../../context/OrderDetails';
+import {pricePerItem} from '../../constants'
 
 type OptionsProps = {
     optionType: string
@@ -20,7 +21,6 @@ export function Options({ optionType }: OptionsProps) {
   const [error, setError] = useState(false)
   const [orderDetails, updateItemCount] = useOrderDetails()
 
-  console.log(orderDetails)
   // optionType is 'scoops' or 'toppings'
   useEffect(() => {
     axios
@@ -34,14 +34,25 @@ export function Options({ optionType }: OptionsProps) {
   }
 
   const ItemComponent = optionType === 'scoops' ? ScoopOption : ToppingOption;
+  const title = optionType[0].toUpperCase() + optionType.slice(1).toLowerCase()
 
   const optionItems = items?.map((item) => (
     <ItemComponent
       key={item.name}
       name={item.name}
       imagePath={item.imagePath}
+      updateItemCount= {(itemName, newItemCount) => updateItemCount(itemName, newItemCount, optionType)}
     />
   ));
 
-  return <Row>{optionItems}</Row>;
+  return (
+    <>
+      <h2>{title}</h2>
+      <p>{pricePerItem[optionType]} each</p>
+      <p>
+        {title} total: {orderDetails.totals[optionType]}
+      </p>
+      <Row>{optionItems}</Row>
+    </>
+  )
 }

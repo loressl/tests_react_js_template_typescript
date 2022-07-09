@@ -10,8 +10,10 @@ function App() {
       <SummaryForm/>
       <br />
       <OrderDetailsProvider>
+        {/*Summary page and entry page need provider*/}
         <OrderEntry/>
       </OrderDetailsProvider>
+      {/*confirmation page does not need provider*/}
     </Container>
   );
 }

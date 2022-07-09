@@ -1,10 +1,9 @@
 import { createContext, useContext, useState, useMemo, useEffect } from 'react';
 import { pricePerItem } from '../constants';
+import { formatCurrency } from '../utilities'
 
 type Totals = {
-    scoops: string
-    toppins: string
-    grandTotal: string
+    [index: string]: string
 }
 
 type UpdateItemCount = (
@@ -14,15 +13,6 @@ type UpdateItemCount = (
 ) => void
 
 type ResetOrder = () => void
-
-// format number as currency
-function formatCurrency(amount: number) {
-    return new Intl.NumberFormat('en-US', {
-        style: 'currency',
-        currency: 'USD',
-        minimumFractionDigits: 2,
-    }).format(amount);
-}
 
 type OrderDetailsData = [
     {
@@ -46,11 +36,11 @@ export function useOrderDetails() {
     return context
 }
 
-interface OptionCountsProps<T> {
-    [index: string]: T
+interface OptionCountsProps {
+    [index: string]: Map<any, any>
 }
 
-function calculateSubtotal(optionType: string, optionCounts: OptionCountsProps<any>) {
+function calculateSubtotal(optionType: string, optionCounts: OptionCountsProps) {
     let optionCount = 0;
     for (const count of optionCounts[optionType].values()) {
         optionCount += count;
@@ -60,13 +50,12 @@ function calculateSubtotal(optionType: string, optionCounts: OptionCountsProps<a
 }
 
 export function OrderDetailsProvider(props: any) {
-    const [optionCounts, setOptionCounts] = useState<OptionCountsProps<any>>({
+    const [optionCounts, setOptionCounts] = useState<OptionCountsProps>({
         scoops: new Map(),
         toppings: new Map(),
     });
-
     const zeroCurrency = formatCurrency(0);
-    const [totals, setTotals] = useState({
+    const [totals, setTotals] = useState<Totals>({
         scoops: zeroCurrency,
         toppings: zeroCurrency,
         grandTotal: zeroCurrency,
