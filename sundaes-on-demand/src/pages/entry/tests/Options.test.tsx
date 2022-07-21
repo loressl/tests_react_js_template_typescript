@@ -1,4 +1,5 @@
 //import { render, screen, waitFor } from '@testing-library/react'
+import userEvent from '@testing-library/user-event'
 import { render, screen  } from '../../../test-utils/testing-library-utils'
 import { Options } from '../Options'
 
@@ -30,5 +31,20 @@ describe('Options', () => {
             'M&Ms topping',
             'Hot fudge topping',
         ])
+    })
+
+    it('dont update total if scoops input is invalid', async()=>{
+        render(<Options optionType='scoops' /> )
+
+        //expect button to be enabled after adding scoop
+        const vanillaInput = await screen.findByRole('spinbutton', {
+            name: 'Vanilla'
+        })
+        await userEvent.clear(vanillaInput)
+        await userEvent.type(vanillaInput, '-1')
+
+        //make sure scoops subtotal hasn't update
+        const scoopsSubtotal = screen.getByText('Scoops total: $0.00')
+        expect(scoopsSubtotal).toBeInTheDocument()
     })
 })

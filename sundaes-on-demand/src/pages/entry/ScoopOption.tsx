@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { Col, Form, Row } from 'react-bootstrap';
 
 type ScoopOptionsProps = {
@@ -7,9 +8,19 @@ type ScoopOptionsProps = {
 }
 
 export default function ScoopOptions({ name, imagePath, updateItemCount }: ScoopOptionsProps) {
-
+  const [isValid, setIsValid] = useState(true);
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    updateItemCount(name, event.target.value)
+    const currentValue = event.target.value
+
+    // make sure we're using a number and not a string to validate
+    const currentValueFloat:number = parseFloat(currentValue)
+    const valueIsValid = currentValueFloat >= 0 && currentValueFloat <= 10 && Math.floor(currentValueFloat) === currentValueFloat
+
+    //validate
+    setIsValid(valueIsValid)
+
+    // only update context if the value is valid
+    if(valueIsValid) updateItemCount(name, event.target.value)
   }
 
   return (
@@ -32,6 +43,7 @@ export default function ScoopOptions({ name, imagePath, updateItemCount }: Scoop
             type="number"
             defaultValue={0}
             onChange={handleChange}
+            isInvalid={!isValid}
           />
         </Col>
       </Form.Group>
